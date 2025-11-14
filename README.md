@@ -7,14 +7,20 @@
 
 ## 快速开始
 
-1. 安装依赖并启动 FastAPI 后端（会自动托管前端静态文件）：
+1. 安装依赖并启动 FastAPI 后端：
 
    ```bash
    pip install -r requirements.txt
    uvicorn app:app --reload --port 8000
    ```
 
-2. 打开 <http://127.0.0.1:8000> 即可在同一端口访问控制台与 API。如仍希望单独部署前端，可用 `python -m http.server -d frontend` 并把 `frontend/main.js` 中的 `API_BASE` 指向后端地址。
+2. 另开一个终端启动前端静态站点（任何静态服务器均可）：
+
+   ```bash
+   python -m http.server 4173 -d frontend
+   ```
+
+3. 访问 <http://127.0.0.1:4173>，即可在浏览器中体验全部菜单与接口。前端默认把 API 指向 `http://127.0.0.1:8000`，如需修改可在 `frontend/main.js` 中调整 `API_BASE`。
 
 ## 主要能力对照
 

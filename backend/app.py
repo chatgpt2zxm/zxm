@@ -1,11 +1,9 @@
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from fastapi import Body, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 
 from .datastore import iso_now, store
 
@@ -749,13 +747,3 @@ def restore_settings(payload: Dict[str, Any]) -> Dict[str, Any]:
     store.data["settings"].setdefault("backup_history", []).append(entry)
     store.save()
     return entry
-
-
-# -------------------------- Frontend delivery --------------------------
-FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
-if FRONTEND_DIR.exists():
-    app.mount(
-        "/",
-        StaticFiles(directory=str(FRONTEND_DIR), html=True),
-        name="frontend",
-    )
