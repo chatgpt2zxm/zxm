@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <title>创作 NAS 管控台</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>创作 NAS 混合云统一菜单</h1>
+      <p>点击左侧菜单即可拉取对应 API，并在右侧查看数据或执行操作。</p>
+    </header>
+    <main>
+      <aside id="menu"></aside>
+      <section id="content">
+        <div class="placeholder">
+          <h2>请选择菜单</h2>
+          <p>系统会调用 FastAPI 后端 (<code>/api</code>)，展示与需求文档一致的路由与权限键。</p>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
