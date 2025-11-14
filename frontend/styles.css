@@ -139,6 +139,77 @@ main {
   font-size: 0.85rem;
 }
 
+.info-grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.feature-list {
+  margin: 0.5rem 0 0;
+  padding-left: 1.2rem;
+  color: #334155;
+  line-height: 1.6;
+}
+
+.feature-list li {
+  margin-bottom: 0.25rem;
+}
+
+.api-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.75rem;
+}
+
+.api-table th,
+.api-table td {
+  padding: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.api-table th {
+  background: #f8fafc;
+  color: #475569;
+}
+
+.api-table code {
+  background: #f1f5f9;
+  border-radius: 4px;
+  padding: 0.15rem 0.3rem;
+  font-size: 0.85rem;
+}
+
+.method-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.method-tag.GET {
+  background: #16a34a;
+}
+
+.method-tag.POST {
+  background: #2563eb;
+}
+
+.method-tag.PATCH,
+.method-tag.PUT {
+  background: #d97706;
+}
+
+.method-tag.DELETE {
+  background: #dc2626;
+}
+
 .panel {
   background: #fff;
   border-radius: 12px;
@@ -152,6 +223,11 @@ main {
   justify-content: space-between;
   align-items: baseline;
   gap: 1rem;
+}
+
+.panel-header span {
+  font-size: 0.85rem;
+  color: #94a3b8;
 }
 
 .form-grid {
