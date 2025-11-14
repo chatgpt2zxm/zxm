@@ -1,26 +1,22 @@
 # 创作 NAS 混合云演示系统（前后端分离版）
 
-本仓库实现了“统一菜单 + 权限控制”方案中列出的全部菜单、接口与操作。系统分为 FastAPI 后端与纯静态前端：
+本仓库实现了“统一菜单 + 权限控制”方案中列出的全部菜单、接口与操作。系统分为 FastAPI 后端与 Vue 3 前端：
 
 - **后端（`backend/`）**：提供 `/api` 命名空间下 60+ 个 REST 接口，覆盖仪表盘、项目、素材、导入、同步、分层、存储、云目标、用户权限、日志告警、系统设置等模块，所有数据由 `data_store.json` 持久化，可直接进行增删改查。
-- **前端（`frontend/`）**：一个零依赖的控制台式页面，按照“一级/二级菜单 + path/menuKey/permKey/apiKey”展示所有模块，点击任意菜单即可调用对应接口并查看返回 JSON，同时可在页面内直接执行 POST/PATCH 等写操作。
+- **前端（`frontend/`）**：使用 Vue 3（通过 `unpkg` CDN 引入）构建的控制台式页面，按照“一级/二级菜单 + path/menuKey/permKey/apiKey”展示所有模块，点击任意菜单即可调用对应接口并查看返回 JSON，同时可在页面内直接执行 POST/PATCH 等写操作。
 
 ## 快速开始
 
-1. 安装依赖并启动 FastAPI 后端：
+1. 安装依赖并启动 FastAPI 后端（会自动托管前端静态文件）：
 
    ```bash
    pip install -r requirements.txt
    uvicorn app:app --reload --port 8000
    ```
 
-2. 另开一个终端启动前端静态站点（任何静态服务器均可）：
+2. 打开 <http://127.0.0.1:8000> 即可在同一端口访问控制台与 API。前端默认通过 `https://unpkg.com` 加载 Vue 3，若需离线运行，可把 `vue.global.prod.js` 下载到 `frontend/` 并修改 `index.html` 中的引用。
 
-   ```bash
-   python -m http.server 4173 -d frontend
-   ```
-
-3. 访问 <http://127.0.0.1:4173>，即可在浏览器中体验全部菜单与接口。前端默认把 API 指向 `http://127.0.0.1:8000`，如需修改可在 `frontend/main.js` 中调整 `API_BASE`。
+3. 如仍希望单独部署前端，可用 `python -m http.server -d frontend`，并在 `frontend/main.js` 中将 `API_BASE` 指向后端地址。
 
 ## 主要能力对照
 

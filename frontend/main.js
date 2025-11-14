@@ -1,4 +1,5 @@
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = window.API_BASE || window.location.origin;
+const HTTP_METHODS = ["GET", "POST", "PATCH", "PUT", "DELETE"];
 
 const MENU = [
   {
@@ -506,76 +507,18 @@ const MENU = [
   },
 ];
 
-const menuContainer = document.getElementById("menu");
-const content = document.getElementById("content");
-let activeKey = null;
-
-function renderMenu() {
-  menuContainer.innerHTML = "";
-  MENU.forEach((group) => {
-    const groupEl = document.createElement("div");
-    groupEl.className = "menu-group";
-    const titleEl = document.createElement("h3");
-    titleEl.textContent = group.title;
-    groupEl.appendChild(titleEl);
-
-    group.children.forEach((item) => {
-      const btn = document.createElement("div");
-      btn.className = "menu-item";
-      btn.textContent = `${item.name} (${item.menuKey})`;
-      if (item.menuKey === activeKey) {
-        btn.classList.add("active");
-      }
-      btn.addEventListener("click", () => loadItem(item));
-      groupEl.appendChild(btn);
-    });
-
-    menuContainer.appendChild(groupEl);
-  });
-}
-
-async function loadItem(item) {
-  activeKey = item.menuKey;
-  renderMenu();
-  content.innerHTML = "";
-  const header = document.createElement("div");
-  header.className = "content-header";
-  header.innerHTML = `
-    <h2>${item.name}</h2>
-    <p>${item.description || ""}</p>
-    <div class="meta">
-      <span>path: ${item.path}</span>
-      <span>menuKey: ${item.menuKey}</span>
-      <span>api: ${item.apiKey}</span>
-      ${item.actions ? `<span>可操作 ${item.actions.length} 项</span>` : ""}
-    </div>
-  `;
-  content.appendChild(header);
-
-  const resultPre = document.createElement("pre");
-  resultPre.textContent = "加载中...";
-  content.appendChild(resultPre);
-
-  try {
-    const response = await callApi(item.method, item.endpoint, item.defaultBody);
-    resultPre.textContent = JSON.stringify(response, null, 2);
-  } catch (error) {
-    resultPre.textContent = `请求失败: ${error.message}`;
+const buildUrl = (endpoint = "") => {
+  if (/^https?:/i.test(endpoint)) {
+    return endpoint;
   }
-
-  if (item.actions && item.actions.length) {
-    const actionsWrap = document.createElement("div");
-    actionsWrap.className = "actions";
-    actionsWrap.innerHTML = `<h3>可执行操作</h3>`;
-    item.actions.forEach((action) => {
-      actionsWrap.appendChild(createActionCard(action));
-    });
-    content.appendChild(actionsWrap);
+  if (!endpoint.startsWith("/")) {
+    return `${API_BASE}/${endpoint}`;
   }
-}
+  return `${API_BASE}${endpoint}`;
+};
 
-async function callApi(method = "GET", endpoint = "", body) {
-  const url = `${API_BASE}${endpoint}`;
+const callApi = async (method = "GET", endpoint = "", body) => {
+  const url = buildUrl(endpoint);
   const options = { method, headers: {} };
   if (["POST", "PATCH", "PUT", "DELETE"].includes(method) && body !== undefined) {
     options.headers["Content-Type"] = "application/json";
@@ -591,40 +534,235 @@ async function callApi(method = "GET", endpoint = "", body) {
     return res.json();
   }
   return res.text();
-}
+};
 
-function createActionCard(action) {
-  const card = document.createElement("div");
-  card.className = "action-card";
-  card.innerHTML = `
-    <h4>${action.label}</h4>
-    <p><code>${action.method} ${action.endpoint}</code></p>
-  `;
-  const textarea = document.createElement("textarea");
-  if (action.samplePayload !== undefined) {
-    textarea.value = JSON.stringify(action.samplePayload, null, 2);
-  } else {
-    textarea.placeholder = "可选：输入 JSON 负载";
+const parsePayload = (text) => {
+  if (!text || !text.trim()) {
+    return { data: undefined };
   }
-  card.appendChild(textarea);
-  const runBtn = document.createElement("button");
-  runBtn.textContent = "执行";
-  const status = document.createElement("div");
-  status.className = "result-status";
-  runBtn.addEventListener("click", async () => {
-    try {
-      const payload = textarea.value ? JSON.parse(textarea.value) : undefined;
-      const res = await callApi(action.method, action.endpoint, payload);
-      status.style.color = "#059669";
-      status.textContent = `成功: ${JSON.stringify(res)}`;
-    } catch (error) {
-      status.style.color = "#dc2626";
-      status.textContent = `失败: ${error.message}`;
-    }
-  });
-  card.appendChild(runBtn);
-  card.appendChild(status);
-  return card;
-}
+  try {
+    return { data: JSON.parse(text) };
+  } catch (error) {
+    return { error };
+  }
+};
 
-renderMenu();
+const formatResponse = (payload) => {
+  if (payload === null || payload === undefined) {
+    return "";
+  }
+  if (typeof payload === "string") {
+    return payload;
+  }
+  return JSON.stringify(payload, null, 2);
+};
+
+const app = Vue.createApp({
+  data() {
+    return {
+      apiBase: API_BASE,
+      menuGroups: MENU,
+      httpMethods: HTTP_METHODS,
+      selectedItem: null,
+      request: {
+        method: "",
+        endpoint: "",
+        payloadText: "",
+      },
+      primary: {
+        loading: false,
+        error: "",
+        response: null,
+      },
+      actionsState: [],
+    };
+  },
+  computed: {
+    prettyPrimaryResponse() {
+      return formatResponse(this.primary.response);
+    },
+  },
+  methods: {
+    selectMenu(item) {
+      this.selectedItem = item;
+      this.request.method = item.method;
+      this.request.endpoint = item.endpoint;
+      this.request.payloadText = item.defaultBody
+        ? JSON.stringify(item.defaultBody, null, 2)
+        : "";
+      this.primary.loading = false;
+      this.primary.error = "";
+      this.primary.response = null;
+      this.actionsState = (item.actions || []).map((action) => ({
+        ...action,
+        payloadText:
+          action.samplePayload !== undefined
+            ? JSON.stringify(action.samplePayload, null, 2)
+            : "",
+        status: "",
+        isError: false,
+        loading: false,
+      }));
+      this.executePrimaryRequest();
+    },
+    async executePrimaryRequest() {
+      this.primary.loading = true;
+      this.primary.error = "";
+      this.primary.response = null;
+      const parsed = parsePayload(this.request.payloadText);
+      if (parsed.error) {
+        this.primary.loading = false;
+        this.primary.error = `JSON 解析失败：${parsed.error.message}`;
+        return;
+      }
+      try {
+        const response = await callApi(
+          this.request.method,
+          this.request.endpoint,
+          parsed.data,
+        );
+        this.primary.response = response;
+      } catch (error) {
+        this.primary.error = error.message;
+      } finally {
+        this.primary.loading = false;
+      }
+    },
+    actionPlaceholder(action) {
+      return action.samplePayload === undefined ? "可选：输入 JSON 负载" : "";
+    },
+    async runAction(index) {
+      const action = this.actionsState[index];
+      if (!action) return;
+      action.loading = true;
+      action.status = "";
+      action.isError = false;
+      const parsed = parsePayload(action.payloadText);
+      if (parsed.error) {
+        action.loading = false;
+        action.status = `JSON 解析失败：${parsed.error.message}`;
+        action.isError = true;
+        return;
+      }
+      try {
+        const response = await callApi(action.method, action.endpoint, parsed.data);
+        action.status = `成功：${formatResponse(response)}`;
+      } catch (error) {
+        action.status = `失败：${error.message}`;
+        action.isError = true;
+      } finally {
+        action.loading = false;
+      }
+    },
+  },
+  template: `
+    <div class="app-shell">
+      <header>
+        <div>
+          <h1>创作 NAS 混合云统一菜单</h1>
+          <p>左侧选择菜单，Vue 前端会直接调用 Python FastAPI 的 /api 接口。</p>
+        </div>
+        <span class="api-base">API: {{ apiBase }}</span>
+      </header>
+      <main>
+        <aside class="menu-panel">
+          <div v-for="group in menuGroups" :key="group.title" class="menu-group">
+            <h3>{{ group.title }}</h3>
+            <button
+              v-for="item in group.children"
+              :key="item.menuKey"
+              class="menu-item"
+              :class="{ active: selectedItem && selectedItem.menuKey === item.menuKey }"
+              @click="selectMenu(item)"
+            >
+              <span class="menu-name">{{ item.name }}</span>
+              <span class="menu-key">{{ item.menuKey }}</span>
+            </button>
+          </div>
+        </aside>
+        <section class="content-panel">
+          <div v-if="!selectedItem" class="placeholder">
+            <h2>请选择菜单</h2>
+            <p>Vue 控制台会展示 path/menuKey/apiKey 信息，并可直接发起请求。</p>
+          </div>
+          <div v-else>
+            <div class="content-header">
+              <h2>{{ selectedItem.name }}</h2>
+              <p>{{ selectedItem.description }}</p>
+              <div class="meta">
+                <span>path: {{ selectedItem.path }}</span>
+                <span>menuKey: {{ selectedItem.menuKey }}</span>
+                <span>api: {{ selectedItem.apiKey }}</span>
+                <span v-if="actionsState.length">操作：{{ actionsState.length }}</span>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <h3>接口调试</h3>
+                <span>{{ request.method }} {{ request.endpoint }}</span>
+              </div>
+              <div class="form-grid">
+                <label>
+                  Method
+                  <select v-model="request.method">
+                    <option v-for="method in httpMethods" :key="method" :value="method">
+                      {{ method }}
+                    </option>
+                  </select>
+                </label>
+                <label class="endpoint">
+                  Endpoint
+                  <input v-model="request.endpoint" />
+                </label>
+              </div>
+              <label class="textarea-label">
+                请求体
+                <textarea
+                  v-model="request.payloadText"
+                  placeholder="GET 请求可留空"
+                ></textarea>
+              </label>
+              <div class="panel-actions">
+                <button @click="executePrimaryRequest" :disabled="primary.loading">
+                  {{ primary.loading ? "请求中..." : "重新请求" }}
+                </button>
+                <span class="error" v-if="primary.error">{{ primary.error }}</span>
+              </div>
+              <pre v-if="primary.response !== null">{{ prettyPrimaryResponse }}</pre>
+              <div v-else-if="primary.loading" class="loading">请求中...</div>
+            </div>
+            <div class="actions" v-if="actionsState.length">
+              <h3>可执行操作</h3>
+              <div class="actions-grid">
+                <div
+                  v-for="(action, index) in actionsState"
+                  :key="action.label + action.endpoint"
+                  class="action-card"
+                >
+                  <div class="action-meta">
+                    <strong>{{ action.label }}</strong>
+                    <code>{{ action.method }} {{ action.endpoint }}</code>
+                  </div>
+                  <textarea
+                    v-model="action.payloadText"
+                    :placeholder="actionPlaceholder(action)"
+                  ></textarea>
+                  <div class="panel-actions">
+                    <button @click="runAction(index)" :disabled="action.loading">
+                      {{ action.loading ? "执行中..." : "执行" }}
+                    </button>
+                    <span class="result-status" :class="{ error: action.isError }" v-if="action.status">
+                      {{ action.status }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  `,
+});
+
+app.mount("#app");
