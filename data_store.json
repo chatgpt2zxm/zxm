@@ -1,0 +1,611 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "name": "品牌宣传片",
+      "clientName": "星河汽车",
+      "ownerName": "林楠",
+      "status": "ongoing",
+      "createdAt": "2024-01-05T10:00:00Z",
+      "updatedAt": "2024-03-10T15:32:00Z",
+      "defaultStorageTargetId": 1,
+      "defaultStorageTargetName": "华南对象存储",
+      "size": 4.2,
+      "projectCapacityGb": 4200,
+      "tierLevel": "hot"
+    },
+    {
+      "id": 2,
+      "name": "纪录片《远行》",
+      "clientName": "逐影传媒",
+      "ownerName": "韩越",
+      "status": "completed",
+      "createdAt": "2023-10-12T09:30:00Z",
+      "updatedAt": "2024-01-18T18:20:00Z",
+      "defaultStorageTargetId": 2,
+      "defaultStorageTargetName": "团队网盘",
+      "size": 7.8,
+      "projectCapacityGb": 7800,
+      "tierLevel": "warm"
+    }
+  ],
+  "project_members": [
+    {
+      "id": 1,
+      "projectId": 1,
+      "userId": 2,
+      "role": "owner",
+      "joinedAt": "2024-01-05T11:10:00Z"
+    },
+    {
+      "id": 2,
+      "projectId": 1,
+      "userId": 3,
+      "role": "editor",
+      "joinedAt": "2024-01-08T08:00:00Z"
+    },
+    {
+      "id": 3,
+      "projectId": 2,
+      "userId": 4,
+      "role": "owner",
+      "joinedAt": "2023-10-13T14:00:00Z"
+    }
+  ],
+  "folders": [
+    {
+      "id": 1,
+      "projectId": 1,
+      "name": "素材",
+      "parentId": null
+    },
+    {
+      "id": 2,
+      "projectId": 1,
+      "name": "工程",
+      "parentId": null
+    },
+    {
+      "id": 3,
+      "projectId": 1,
+      "name": "输出",
+      "parentId": null
+    },
+    {
+      "id": 4,
+      "projectId": 1,
+      "name": "Day1",
+      "parentId": 1
+    },
+    {
+      "id": 5,
+      "projectId": 1,
+      "name": "Day2",
+      "parentId": 1
+    },
+    {
+      "id": 6,
+      "projectId": 2,
+      "name": "原始素材",
+      "parentId": null
+    },
+    {
+      "id": 7,
+      "projectId": 2,
+      "name": "参考资料",
+      "parentId": null
+    }
+  ],
+  "assets": [
+    {
+      "id": 1,
+      "folderId": 4,
+      "projectId": 1,
+      "fileName": "A001_C001.mp4",
+      "fileType": "video",
+      "size": 12.5,
+      "resolution": "6K",
+      "duration": 45,
+      "shootDate": "2024-01-04",
+      "projectName": "品牌宣传片",
+      "tags": [
+        "汽车",
+        "外景"
+      ],
+      "tierLevel": "hot",
+      "localPresence": "both",
+      "clientName": "星河汽车",
+      "camera": "FX6",
+      "location": "上海",
+      "createdAt": "2024-01-05T12:00:00Z",
+      "updatedAt": "2024-01-05T12:00:00Z",
+      "owner": "林楠"
+    },
+    {
+      "id": 2,
+      "folderId": 5,
+      "projectId": 1,
+      "fileName": "花絮采访.wav",
+      "fileType": "audio",
+      "size": 0.8,
+      "resolution": null,
+      "duration": 120,
+      "shootDate": "2024-01-05",
+      "projectName": "品牌宣传片",
+      "tags": [
+        "采访"
+      ],
+      "tierLevel": "warm",
+      "localPresence": "local",
+      "clientName": "星河汽车",
+      "camera": "录音笔",
+      "location": "上海",
+      "createdAt": "2024-01-06T10:00:00Z",
+      "updatedAt": "2024-01-06T10:00:00Z",
+      "owner": "赵璐"
+    },
+    {
+      "id": 3,
+      "folderId": 6,
+      "projectId": 2,
+      "fileName": "旅途A卷.raw",
+      "fileType": "image",
+      "size": 2.2,
+      "resolution": "8K",
+      "duration": null,
+      "shootDate": "2023-09-20",
+      "projectName": "纪录片《远行》",
+      "tags": [
+        "自然",
+        "山脉"
+      ],
+      "tierLevel": "cold",
+      "localPresence": "cloud",
+      "clientName": "逐影传媒",
+      "camera": "RED",
+      "location": "西藏",
+      "createdAt": "2023-10-15T09:00:00Z",
+      "updatedAt": "2023-11-02T16:00:00Z",
+      "owner": "韩越"
+    }
+  ],
+  "import_tasks": [
+    {
+      "id": 1,
+      "sourceDevice": "CFexpress-01",
+      "sourcePaths": [
+        "/DCIM/100MEDIA"
+      ],
+      "targetProjectId": 1,
+      "targetFolderId": 4,
+      "createdBy": "林楠",
+      "status": "success",
+      "createdAt": "2024-01-05T13:00:00Z",
+      "startedAt": "2024-01-05T13:05:00Z",
+      "finishedAt": "2024-01-05T13:25:00Z",
+      "totalFiles": 320,
+      "successFiles": 320,
+      "failedFiles": 0
+    },
+    {
+      "id": 2,
+      "sourceDevice": "SSD-旅拍",
+      "sourcePaths": [
+        "/旅途A",
+        "/旅途B"
+      ],
+      "targetProjectId": 2,
+      "targetFolderId": 6,
+      "createdBy": "韩越",
+      "status": "partial",
+      "createdAt": "2023-10-18T09:30:00Z",
+      "startedAt": "2023-10-18T09:32:00Z",
+      "finishedAt": "2023-10-18T10:50:00Z",
+      "totalFiles": 540,
+      "successFiles": 520,
+      "failedFiles": 20
+    }
+  ],
+  "import_devices": [
+    {
+      "name": "CFexpress-01",
+      "mountPath": "/mnt/cfexpress",
+      "capacityGb": 512,
+      "usedGb": 320
+    },
+    {
+      "name": "SSD-旅拍",
+      "mountPath": "/mnt/travel",
+      "capacityGb": 2000,
+      "usedGb": 900
+    }
+  ],
+  "search_views": [
+    {
+      "id": 1,
+      "userId": 2,
+      "name": "宣传片-热素材",
+      "conditions": {
+        "projectIds": [
+          1
+        ],
+        "tierLevel": "hot"
+      },
+      "lastUsedAt": "2024-03-10T09:00:00Z"
+    }
+  ],
+  "sync_tasks": [
+    {
+      "id": 1,
+      "name": "宣传片云备份",
+      "projectId": 1,
+      "source": "项目/品牌宣传片/素材",
+      "target": [
+        "华南对象存储",
+        "团队网盘"
+      ],
+      "direction": "local_to_cloud",
+      "mode": "incremental",
+      "schedule": "每日 02:00",
+      "lastRunStatus": "success",
+      "lastRunAt": "2024-03-09T02:10:00Z",
+      "enabled": true
+    },
+    {
+      "id": 2,
+      "name": "纪录片回迁",
+      "projectId": 2,
+      "source": "云端/远行",
+      "target": [
+        "本地冷数据卷"
+      ],
+      "direction": "cloud_to_local",
+      "mode": "full",
+      "schedule": "每周一 01:00",
+      "lastRunStatus": "partial",
+      "lastRunAt": "2024-03-08T01:15:00Z",
+      "enabled": false
+    }
+  ],
+  "sync_jobs": [
+    {
+      "id": 1,
+      "taskId": 1,
+      "taskName": "宣传片云备份",
+      "startedAt": "2024-03-09T02:00:00Z",
+      "finishedAt": "2024-03-09T02:10:00Z",
+      "status": "success",
+      "totalFiles": 142,
+      "successFiles": 142,
+      "failedFiles": 0
+    },
+    {
+      "id": 2,
+      "taskId": 2,
+      "taskName": "纪录片回迁",
+      "startedAt": "2024-03-08T01:00:00Z",
+      "finishedAt": "2024-03-08T01:25:00Z",
+      "status": "partial",
+      "totalFiles": 80,
+      "successFiles": 70,
+      "failedFiles": 10
+    }
+  ],
+  "tier_policies": [
+    {
+      "id": 1,
+      "type": "global",
+      "hotToWarmDays": 14,
+      "warmToColdDays": 45,
+      "coldCacheGb": 800
+    },
+    {
+      "id": 2,
+      "type": "project",
+      "projectId": 2,
+      "projectName": "纪录片《远行》",
+      "hotToWarmDays": 7,
+      "warmToColdDays": 20,
+      "coldCacheGb": 200
+    }
+  ],
+  "restore_tasks": [
+    {
+      "id": 1,
+      "initiator": "韩越",
+      "objectType": "folder",
+      "projectId": 2,
+      "projectName": "纪录片《远行》",
+      "status": "running",
+      "startedAt": "2024-03-10T04:00:00Z",
+      "finishedAt": null,
+      "failureReason": null
+    }
+  ],
+  "disks": [
+    {
+      "id": 1,
+      "name": "sda",
+      "model": "Seagate Exos",
+      "capacityGb": 8000,
+      "status": "normal",
+      "temperature": 34,
+      "smart": "OK"
+    },
+    {
+      "id": 2,
+      "name": "sdb",
+      "model": "Seagate Exos",
+      "capacityGb": 8000,
+      "status": "warning",
+      "temperature": 42,
+      "smart": "温度偏高"
+    }
+  ],
+  "storage_arrays": [
+    {
+      "id": 1,
+      "raidType": "RAID5",
+      "disks": [
+        "sda",
+        "sdb",
+        "sdc"
+      ],
+      "totalGb": 16000,
+      "usableGb": 12000,
+      "status": "normal"
+    }
+  ],
+  "storage_volumes": [
+    {
+      "id": 1,
+      "arrayId": 1,
+      "mountPoint": "/mnt/media",
+      "capacityGb": 8000,
+      "usedGb": 5200,
+      "fsType": "ext4"
+    }
+  ],
+  "storage_targets": [
+    {
+      "id": 1,
+      "name": "华南对象存储",
+      "type": "object",
+      "provider": "OSS",
+      "bucket": "creative-prod",
+      "status": "enabled",
+      "endpoint": "oss-cn-shenzhen.aliyuncs.com"
+    },
+    {
+      "id": 2,
+      "name": "团队网盘",
+      "type": "netdisk",
+      "provider": "teamDrive",
+      "account": "team@example.com",
+      "status": "enabled"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "name": "系统管理员",
+      "email": "admin@example.com",
+      "roles": [
+        1
+      ],
+      "status": "enabled",
+      "lastLogin": "2024-03-10T08:15:00Z"
+    },
+    {
+      "id": 2,
+      "username": "lin_nan",
+      "name": "林楠",
+      "email": "lin.nan@example.com",
+      "roles": [
+        2
+      ],
+      "status": "enabled",
+      "lastLogin": "2024-03-09T18:20:00Z"
+    },
+    {
+      "id": 3,
+      "username": "zhao_lu",
+      "name": "赵璐",
+      "email": "zhao.lu@example.com",
+      "roles": [
+        3
+      ],
+      "status": "enabled",
+      "lastLogin": "2024-03-07T13:11:00Z"
+    },
+    {
+      "id": 4,
+      "username": "han_yue",
+      "name": "韩越",
+      "email": "han.yue@example.com",
+      "roles": [
+        2
+      ],
+      "status": "enabled",
+      "lastLogin": "2024-03-06T09:42:00Z"
+    }
+  ],
+  "roles": [
+    {
+      "id": 1,
+      "name": "管理员",
+      "description": "系统管理员，拥有全部权限",
+      "permissions": "*"
+    },
+    {
+      "id": 2,
+      "name": "项目负责人",
+      "description": "可管理项目与素材",
+      "permissions": [
+        "perm.project.view",
+        "perm.project.edit",
+        "perm.project.member.manage",
+        "perm.asset.view",
+        "perm.asset.edit",
+        "perm.asset.meta.edit",
+        "perm.asset.search",
+        "perm.sync.view"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "项目成员",
+      "description": "只读与基础上传",
+      "permissions": [
+        "perm.project.view",
+        "perm.asset.view",
+        "perm.asset.search"
+      ]
+    }
+  ],
+  "permissions": [
+    "perm.project.view",
+    "perm.project.create",
+    "perm.project.edit",
+    "perm.project.archive",
+    "perm.project.member.view",
+    "perm.project.member.manage",
+    "perm.asset.view",
+    "perm.asset.edit",
+    "perm.asset.meta.edit",
+    "perm.import.create",
+    "perm.import.view",
+    "perm.import.retry",
+    "perm.asset.search",
+    "perm.search.view.manage",
+    "perm.sync.manage",
+    "perm.sync.view",
+    "perm.tier.manage",
+    "perm.restore.view",
+    "perm.restore.retry",
+    "perm.storage.view",
+    "perm.storage.manage",
+    "perm.cloud.manage",
+    "perm.user.manage",
+    "perm.role.manage",
+    "perm.project.access.manage",
+    "perm.logs.audit.view",
+    "perm.logs.system.view",
+    "perm.alert.view",
+    "perm.alert.manage",
+    "perm.settings.base",
+    "perm.settings.network",
+    "perm.settings.backup"
+  ],
+  "audit_logs": [
+    {
+      "id": 1,
+      "time": "2024-03-10T08:15:00Z",
+      "user": "admin",
+      "action": "login",
+      "targetType": "system",
+      "targetId": null,
+      "ip": "10.0.0.5",
+      "details": {
+        "result": "success"
+      }
+    },
+    {
+      "id": 2,
+      "time": "2024-03-09T13:30:00Z",
+      "user": "lin_nan",
+      "action": "upload",
+      "targetType": "asset",
+      "targetId": 1,
+      "ip": "10.0.0.18",
+      "details": {
+        "file": "A001_C001.mp4"
+      }
+    }
+  ],
+  "system_logs": [
+    {
+      "id": 1,
+      "time": "2024-03-10T07:20:00Z",
+      "module": "sync",
+      "level": "info",
+      "message": "任务宣传片云备份执行完成"
+    },
+    {
+      "id": 2,
+      "time": "2024-03-09T22:18:00Z",
+      "module": "disk",
+      "level": "warn",
+      "message": "sdb 温度超过阈值"
+    }
+  ],
+  "alerts": [
+    {
+      "id": 1,
+      "type": "capacity",
+      "level": "high",
+      "content": "媒体卷使用率 92%",
+      "status": "open",
+      "createdAt": "2024-03-09T22:00:00Z",
+      "handler": null,
+      "handledAt": null
+    },
+    {
+      "id": 2,
+      "type": "disk",
+      "level": "medium",
+      "content": "磁盘 sdb SMART 报警",
+      "status": "processing",
+      "createdAt": "2024-03-08T08:00:00Z",
+      "handler": "admin",
+      "handledAt": "2024-03-08T09:30:00Z"
+    }
+  ],
+  "alert_settings": {
+    "capacityThresholds": [
+      80,
+      90
+    ],
+    "diskRules": "SMART 异常即告警",
+    "syncFailTimes": 3,
+    "notification": {
+      "smtpHost": "smtp.example.com",
+      "recipients": [
+        "ops@example.com"
+      ]
+    }
+  },
+  "settings": {
+    "base": {
+      "systemName": "创作 NAS",
+      "hostname": "nas-demo",
+      "timezone": "Asia/Shanghai",
+      "language": "zh-CN",
+      "adminEmail": "admin@example.com"
+    },
+    "network": {
+      "mode": "static",
+      "ip": "192.168.10.50",
+      "gateway": "192.168.10.1",
+      "dns": [
+        "114.114.114.114"
+      ],
+      "smb": {
+        "enabled": true
+      },
+      "nfs": {
+        "enabled": false
+      }
+    },
+    "backup_history": [
+      {
+        "id": 1,
+        "file": "config-2024-03-01.json",
+        "createdAt": "2024-03-01T00:05:00Z",
+        "downloadUrl": "/downloads/config-2024-03-01.json"
+      }
+    ]
+  },
+  "netdisk_sessions": {}
+}

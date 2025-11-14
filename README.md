@@ -1,49 +1,50 @@
-# 创作 NAS 混合云存储系统 Demo
+# 创作 NAS 混合云演示系统（前后端分离版）
 
-该项目提供一套基于 Python/Flask 的“本地 NAS + 云端存储 + 智能同步”演示系统，覆盖需求文档中的核心能力，便于快速验证：
+本仓库实现了“统一菜单 + 权限控制”方案中列出的全部菜单、接口与操作。系统分为 FastAPI 后端与 Vue 3 前端：
 
-- 项目/文件/标签/元数据管理
-- 分层存储策略与冷数据回迁申请
-- 本地磁盘、RAID、云端对象存储与网盘接入配置
-- 同步任务调度、限速策略与运行日志
-- 多用户角色与项目级权限分配（示例）
+- **后端（`backend/`）**：提供 `/api` 命名空间下 60+ 个 REST 接口，覆盖仪表盘、项目、素材、导入、同步、分层、存储、云目标、用户权限、日志告警、系统设置等模块，所有数据由 `data_store.json` 持久化，可直接进行增删改查。
+- **前端（`frontend/`）**：使用 Vue 3（通过 `unpkg` CDN 引入）构建的控制台式页面，按照“一级/二级菜单 + path/menuKey/permKey/apiKey”展示所有模块，点击任意菜单即可调用对应接口并查看返回 JSON，同时可在页面内直接执行 POST/PATCH 等写操作。
 
-## 运行方式
+## 快速开始
 
-```bash
-pip install -r requirements.txt
-python app.py
-```
+1. 安装依赖并启动 FastAPI 后端（会自动托管前端静态文件）：
 
-启动后访问 <http://127.0.0.1:5000> 即可体验所有页面。应用会自动创建 `nas_demo.db` 并注入示例数据，方便直接进行增删改查验证。
+   ```bash
+   pip install -r requirements.txt
+   uvicorn app:app --reload --port 8000
+   ```
 
-## 主要页面
+2. 打开 <http://127.0.0.1:8000> 即可在同一端口访问控制台与 API。前端默认通过 `https://unpkg.com` 加载 Vue 3，若需离线运行，可把 `vue.global.prod.js` 下载到 `frontend/` 并修改 `index.html` 中的引用。
 
-| 页面 | 路径 | 功能 |
-| --- | --- | --- |
-| 仪表盘 | `/` | 容量/分层统计、任务状态、磁盘健康 |
-| 项目管理 | `/projects` | 项目检索、创建、导入文件、项目成员 |
-| 项目详情 | `/projects/<id>` | 状态/策略调整、素材登记、冷数据回迁 |
-| 文件详情 | `/files/<id>` | 元数据与标签编辑、云端恢复操作 |
-| 本地存储 | `/storage/local` | 磁盘与 RAID 管理、健康信息 |
-| 云接入 | `/storage/cloud` | 对象存储/网盘配置、扫码/密钥信息 |
-| 同步任务 | `/sync_tasks` | 创建任务、设置限速/过滤、手动执行 |
-| 分层策略 | `/policies` | 按项目配置 Hot/Warm/Cold 规则 |
-| 用户权限 | `/users` | 创建账号、查看角色与负责项目 |
-| 日志审计 | `/logs` | 登录、文件、同步等操作追踪 |
-| 功能规划 | `/functional_overview` | 需求背景、业务目标与模块亮点速览 |
-| 正式 PRD | `/prd` | 面向 PM/业务的项目概述、范围、场景与指标 |
-| 概要设计 | `/design` | 模块拆分、核心数据模型、接口与流程 |
+3. 如仍希望单独部署前端，可用 `python -m http.server -d frontend`，并在 `frontend/main.js` 中将 `API_BASE` 指向后端地址。
 
-## 示例数据
+## 主要能力对照
 
-系统默认注入如下演示数据，便于点击体验：
+| 一级菜单 | 二级菜单 | path/menuKey | 主要接口（permKey 可在 `/api/permissions` 查看） |
+| --- | --- | --- | --- |
+| 仪表盘 | 总览看板 | `/dashboard` / `dashboard.overview` | `GET /api/dashboard/overview` |
+| 项目中心 | 项目列表 / 项目详情 / 项目成员 | `/projects` 等 | `GET/POST/PATCH/DELETE /api/projects`、`/api/projects/{id}/members` |
+| 素材管理 | 目录浏览 / 文件详情 | `/assets/browser` | `GET /api/projects/{id}/tree`、`GET/PATCH /api/assets/{id}` |
+| 导入与归档 | 导入向导 / 任务列表 | `/import/wizard` | `GET /api/import/devices`、`/api/import/tasks` |
+| 搜索与视图 | 全局检索 / 已保存视图 | `/search` | `POST /api/assets/search`、`/api/search/views` |
+| 同步与分层 | 同步任务 / 执行历史 / 分层策略 / 冷数据恢复 | `/sync/tasks` 等 | `GET/POST/PATCH /api/sync-tasks`、`/api/sync-jobs`、`/api/tier-policies`、`/api/restore/tasks` |
+| 存储与资源 | 磁盘 / RAID / 容量 | `/storage/disks` | `GET /api/disks`、`/api/storage/arrays`、`/api/storage/capacity/*` |
+| 云存储与网盘 | 对象存储配置 / 网盘绑定 | `/storage/targets/*` | `GET/POST/PATCH/DELETE /api/storage-targets`、`/api/netdisk/{provider}/bind` |
+| 用户与权限 | 用户 / 角色 / 项目授权 | `/auth/*` | `GET/POST/PATCH /api/users`、`/api/roles` |
+| 日志与审计 | 操作日志 / 系统日志 | `/logs/*` | `GET /api/audit/logs`、`/api/system/logs` |
+| 告警与监控 | 告警列表 / 告警规则 | `/alerts*` | `GET/PATCH /api/alerts`、`GET/POST /api/alerts/settings` |
+| 系统设置 | 基础 / 网络 / 备份 | `/settings/*` | `GET/POST /api/settings/base|network|backup|restore` |
 
-- 项目：品牌宣传片、纪录片《远行》
-- 文件：原始素材、工程文件、输出成片（包含标签/元数据）
-- 云端目标：华南对象存储、团队网盘
-- 同步任务：宣传片云备份，包含多目标与限速策略
-- 用户：系统管理员、项目负责人、普通成员
-- 日志：登录、上传、同步完成等记录
+所有接口均返回 JSON，且示例数据在 `backend/datastore.py` 中可自由扩展。若删除 `data_store.json`，系统会自动恢复默认演示数据。
 
-如需重置，可删除 `nas_demo.db` 后再次运行应用。
+## 数据存储
+
+- `backend/datastore.py` 定义了默认数据结构（项目、文件、任务、策略、用户、告警、设置等）以及统一的增删改查工具。
+- 所有写操作都会立即落盘到 `data_store.json`，便于多次启动与调试。
+
+## 自定义与扩展
+
+- 可在前端 `MENU` 配置中追加新的路由或动作，满足更多自定义 API 调用。
+- 后端可替换为真实数据库或接入业务逻辑，只需保持接口协议即可。
+
+欢迎在此基础上继续深化 UI、接入真实认证、或对接实际的 NAS/云存储控制平面。
