@@ -1,0 +1,140 @@
+:root {
+  font-family: "PingFang SC", "Segoe UI", sans-serif;
+  color: #0f172a;
+  background-color: #f5f6fb;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: linear-gradient(120deg, #0f62fe, #3d7bfd);
+  color: #fff;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+}
+
+main {
+  flex: 1;
+  display: flex;
+}
+
+#menu {
+  width: 320px;
+  background: #fff;
+  border-right: 1px solid #e2e8f0;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.menu-group {
+  margin-bottom: 1.5rem;
+}
+
+.menu-group h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: #475569;
+}
+
+.menu-item {
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  margin-bottom: 0.25rem;
+  transition: background 0.2s;
+  border: 1px solid transparent;
+}
+
+.menu-item:hover,
+.menu-item.active {
+  background: #eef2ff;
+  border-color: #6366f1;
+}
+
+#content {
+  flex: 1;
+  padding: 1.5rem 2rem;
+  overflow-y: auto;
+}
+
+.content-header {
+  margin-bottom: 1rem;
+}
+
+.content-header h2 {
+  margin: 0;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.meta span {
+  background: #e2e8f0;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+pre {
+  background: #0f172a;
+  color: #f8fafc;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.actions {
+  margin-top: 1.5rem;
+}
+
+.action-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 1rem;
+}
+
+textarea {
+  width: 100%;
+  min-height: 120px;
+  border: 1px solid #cbd5f5;
+  border-radius: 6px;
+  padding: 0.5rem;
+  font-family: "Fira Code", monospace;
+  font-size: 0.9rem;
+}
+
+button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #0f172a;
+}
+
+.result-status {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #059669;
+}
+
+.placeholder {
+  text-align: center;
+  color: #94a3b8;
+  margin-top: 4rem;
+}
